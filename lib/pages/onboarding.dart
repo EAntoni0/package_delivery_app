@@ -33,7 +33,7 @@ class _OnboardingState extends State<Onboarding> {
                 Text(
                   "Track your parcel\nfrom anywhere",
                   textAlign: TextAlign.center,
-                  style: AppWidget.HeadLineTextfeildStyle(),
+                  style: AppWidget.HeadLineTextfeildStyle(30),
                 ),
 
                 SizedBox(height: 25),
