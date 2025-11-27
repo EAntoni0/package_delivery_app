@@ -57,7 +57,7 @@ class _HomeState extends State<Home> {
                     SizedBox(height: 30.0),
                     Text(
                       "Track your shipment",
-                      style: AppWidget.WhiteTextfeildStyle(),
+                      style: AppWidget.WhiteTextfeildStyle(22.0),
                     ),
                     SizedBox(height: 5.0),
                     Text("Please enter your tracking number", style: AppWidget.differentshadetWhiteTextfeildStyle(),),
@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
                   child: Container(
                     
                           width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.only(left: 10.0),
+                          padding: EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0, right: 6.0),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(30),

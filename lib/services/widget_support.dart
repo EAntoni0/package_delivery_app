@@ -10,6 +10,14 @@ class AppWidget{
     );
   }
 
+  static TextStyle normalTextfeildStyle(double textsize){
+    return TextStyle(
+      color: Colors.black,
+      fontSize: textsize,
+      fontWeight: FontWeight.w500,
+    );
+  }
+
   static TextStyle SimpleTextfeildStyle(){
     return TextStyle(
       color: Colors.black38,
@@ -26,10 +34,10 @@ class AppWidget{
     );
   }
 
-  static TextStyle WhiteTextfeildStyle(){
+  static TextStyle WhiteTextfeildStyle(double textsize){
     return TextStyle(
       color: Colors.white,
-      fontSize: 24.0,
+      fontSize: textsize,
       fontWeight: FontWeight.bold,
     );
   }

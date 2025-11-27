@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:package_delivery_app/pages/bottomnav.dart';
 import 'package:package_delivery_app/pages/home.dart';
 import 'package:package_delivery_app/pages/onboarding.dart';
+import 'package:package_delivery_app/pages/post.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,7 +35,10 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: Home()
+      home: Bottomnav()
+      //home: Home()
+      //home: PostPage()
+      //home: Onboarding()
     );
   }
 }
