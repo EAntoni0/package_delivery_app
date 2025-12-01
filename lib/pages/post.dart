@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:package_delivery_app/services/database.dart';
 import 'package:package_delivery_app/services/widget_support.dart';
+import 'package:random_string/random_string.dart';
+
 
 class PostPage extends StatefulWidget {
   const PostPage({super.key});
@@ -9,6 +13,39 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
+
+  //controladores para capturar lo que ingresa el usuario
+  TextEditingController pickupController = TextEditingController();
+  TextEditingController dropoffController = TextEditingController();
+
+  //funcion para subir los datos
+  uploadItem() async {
+    if(pickupController.text != "" && dropoffController.text != ""){
+      //obtener Id del usuario que tiene iniciado sesion en el momento actual
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+
+      //mapa de datos
+      Map<String, dynamic> packageInfoMap = {
+        "PickUp": pickupController.text,
+        "DropOff": dropoffController.text,
+        "Id": randomAlphaNumeric(10), //con esto se genera un id aleatorio
+        "Status": "Pending", 
+        "Date": DateTime.now().toString(),
+      };
+
+      //para guardar en firebase
+      await DatabaseMethods().addPackageDetails(packageInfoMap, uid).then((value) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            backgroundColor: Colors.green,
+            content: Text("Package Order Placed Successfully!")));      
+        // Limpiar campos despues de subir los datos
+        pickupController.clear();
+        dropoffController.clear();
+      });
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +78,10 @@ class _PostPageState extends State<PostPage> {
                           margin: EdgeInsets.only(right: 20.0),
                           decoration: BoxDecoration(color: Color(0xFFececf8), borderRadius: BorderRadius.circular(10.0)),
                           child: TextField(
+
+                            //controlador del formulario de lugar de recogida
+                            controller: pickupController,
+
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: "Enter Pick Up Location",
@@ -55,6 +96,10 @@ class _PostPageState extends State<PostPage> {
                           margin: EdgeInsets.only(right: 20.0),
                           decoration: BoxDecoration(color: Color(0xFFececf8), borderRadius: BorderRadius.circular(10.0)),
                           child: TextField(
+
+                            // controlador para el formulario de lugra de entrega
+                            controller: dropoffController,
+
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: "Enter Drop Off Location",
@@ -235,17 +280,23 @@ class _PostPageState extends State<PostPage> {
                                   Text("\$80", style: AppWidget.HeadLineTextfeildStyle(28.0),),
                                 ],
                               ),
-                              SizedBox(width: 50.0),
-                              Container(
-                                height: 60.0,
-                                width: 200,
-                                decoration: BoxDecoration(
-                                  color: Color(0xff6053f8),
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                child:Center(
-                                  child: Text(
-                                    "Place Order ", style: AppWidget.WhiteTextfeildStyle(20.0),
+                              //SizedBox(width: 50.0),
+                            
+                              GestureDetector(
+                                onTap: (){
+                                  uploadItem();
+                                },
+                                child: Container(
+                                  height: 60.0,
+                                  width: 200,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xff6053f8),
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  child:Center(
+                                    child: Text(
+                                      "Place Order ", style: AppWidget.WhiteTextfeildStyle(20.0),
+                                    ),
                                   ),
                                 ),
                               )

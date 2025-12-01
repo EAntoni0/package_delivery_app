@@ -50,4 +50,22 @@ class AppWidget{
     );
   }
 
+  static TextStyle SemiBoldTextfeildStyle() {
+  return const TextStyle(
+    color: Colors.black,
+    fontSize: 20.0,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Poppins',
+  );
+}
+
+static TextStyle LightTextfeildStyle() {
+  return const TextStyle(
+    color: Colors.black38,
+    fontSize: 20.0,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Poppins',
+  );
+}
+
 }
