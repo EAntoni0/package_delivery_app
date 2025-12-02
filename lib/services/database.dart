@@ -28,4 +28,26 @@ class DatabaseMethods {
   }
 
 
+  // Función para actualizar el status del envio
+  Future updateStatus(String id, String orderId) async {
+    return await FirebaseFirestore.instance
+        .collection("users")
+        .doc(id)
+        .collection("Orders")
+        .doc(orderId)
+        .update({"Status": "Delivered"});
+  }
+
+
+  // Buscar un pedido por su ID de rastreo (Track ID)
+  Future<QuerySnapshot> getOrderByTrackId(String id, String trackId) async {
+    return await FirebaseFirestore.instance
+        .collection("users")
+        .doc(id)
+        .collection("Orders")
+        .where("Id", isEqualTo: trackId) // Buscamos por el campo "Id" que generamos
+        .get();
+  }
+
+
 }
