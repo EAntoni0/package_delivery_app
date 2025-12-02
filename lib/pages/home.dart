@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:package_delivery_app/services/database.dart';
 import 'package:package_delivery_app/services/widget_support.dart';
 
 class Home extends StatefulWidget {
@@ -13,7 +16,31 @@ class _HomeState extends State<Home> {
   //controlador para el campo de busqueda de envios por Id
   TextEditingController trackController = TextEditingController();
 
-  
+  searchPackage() async {
+    if (trackController.text.isNotEmpty) {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      
+      // Llamamos a la base de datos
+      QuerySnapshot querySnapshot = await DatabaseMethods().getOrderByTrackId(uid, trackController.text);
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // Si encontramos el pedido, tomamos el primero (debería ser único)
+        DocumentSnapshot ds = querySnapshot.docs[0];
+        
+        // Navegamos a detalles. 
+        // Pasamos secondsPassed: 0 porque venimos del Home, la pantalla de detalles calculará el estado.
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Details(ds: ds, secondsPassed: 0)));
+      } else {
+        // Si no existe el ID
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.orange,
+          content: Text("Tracking number not found! Check your ID."),
+        ));
+      }
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
