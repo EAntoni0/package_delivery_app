@@ -49,5 +49,15 @@ class DatabaseMethods {
         .get();
   }
 
+  //funcion para obtener los datos del usuario actual
+
+  Future<DocumentSnapshot> getUserDetail(String id) async {
+    return await FirebaseFirestore.instance.collection("users").doc(id).get();
+  }
+
+  //funcion para eliminar los datos del usuario
+  Future deleteUser(String id) async {
+    return await FirebaseFirestore.instance.collection("users").doc(id).delete();
+  }
 
 }

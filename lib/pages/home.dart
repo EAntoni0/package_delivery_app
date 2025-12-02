@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:package_delivery_app/pages/details.dart';
 import 'package:package_delivery_app/services/database.dart';
 import 'package:package_delivery_app/services/widget_support.dart';
 
@@ -20,11 +21,11 @@ class _HomeState extends State<Home> {
     if (trackController.text.isNotEmpty) {
       String uid = FirebaseAuth.instance.currentUser!.uid;
       
-      // Llamamos a la base de datos
+      // Llamar a la base de datos
       QuerySnapshot querySnapshot = await DatabaseMethods().getOrderByTrackId(uid, trackController.text);
 
       if (querySnapshot.docs.isNotEmpty) {
-        // Si encontramos el pedido, tomamos el primero (debería ser único)
+        // si el id de pedido coincide con lo que puso el usuario lo tomamos
         DocumentSnapshot ds = querySnapshot.docs[0];
         
         // Navegamos a detalles. 
@@ -105,11 +106,24 @@ class _HomeState extends State<Home> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10)),
                       child: TextField(
+                        controller: trackController,
+                        // Esto hace que el teclado muestre "Buscar" o "Ir" en lugar de "Enter"
+                        textInputAction: TextInputAction.search, 
+                        onSubmitted: (value) => searchPackage(), // Buscar al dar Enter
+
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "Enter track number",
                           hintStyle: AppWidget.HeadLineTextfeildStyle(18),
                           prefixIcon: const Icon(Icons.track_changes, color: Colors.red),
+                          
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              searchPackage();
+                            },
+                            child: const Icon(Icons.search, color: Color(0xff6053f8)),
+                          )
+
                         ),
                         style: const TextStyle(color: Colors.black, fontSize: 20.0),
                       ),
