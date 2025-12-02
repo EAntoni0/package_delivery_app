@@ -46,7 +46,7 @@ class _DetailsState extends State<Details> {
       appBar: AppBar(
         backgroundColor: const Color(0xff6053f8),
         elevation: 0,
-        title: Text("Shipment Details", style: AppWidget.WhiteTextfeildStyle(24)),
+        title: Text("Shipment Details", style: AppWidget.WhiteTextfeildStyle(26)),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.white),
@@ -61,8 +61,13 @@ class _DetailsState extends State<Details> {
         width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(
             color: Colors.white,
+            border: Border.fromBorderSide(BorderSide(color: Colors.black, width: 1.0)),
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+                topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          ),
+
+                
+                
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +76,7 @@ class _DetailsState extends State<Details> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Order #${widget.ds["Id"]}", style: const TextStyle(color: Colors.black54, fontWeight: FontWeight.bold)),
+                  Text("Order #${widget.ds["Id"]}", style: const TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 16)),
                   Text("\$${widget.ds["Price"]}", style: AppWidget.HeadLineTextfeildStyle(26)),
                 ],
               ),
@@ -80,13 +85,13 @@ class _DetailsState extends State<Details> {
               // ESTADO ACTUAL DESTACADO
               Row(
                 children: [
-                  Text("Status: ", style: AppWidget.LightTextfeildStyle()),
+                  Text("Status: ", style:  AppWidget.LightTextfeildStyle()),
                   Text(
                     currentStatus, 
                     style: TextStyle(
                       color: isDelivered ? Colors.green : const Color(0xff6053f8), 
                       fontWeight: FontWeight.bold,
-                      fontSize: 16
+                      fontSize: 18
                     )
                   ),
                 ],
@@ -118,7 +123,7 @@ class _DetailsState extends State<Details> {
                             color: stepCompleted 
                                 ? (isLast ? Colors.green : const Color(0xff6053f8)) 
                                 : Colors.grey.shade300, 
-                            size: 24
+                            size: 26
                           ),
                           // Línea conectora (no se dibuja en el último paso)
                           if (step['time'] != 40) 
@@ -130,6 +135,14 @@ class _DetailsState extends State<Details> {
                         ],
                       ),
                       const SizedBox(width: 15),
+                      Icon(
+                        step['icon'], 
+                        size: 34, 
+                        color: stepCompleted 
+                            ? (isLast ? Colors.green : const Color(0xff6053f8)) 
+                            : Colors.grey.shade400
+                      ),
+                      const SizedBox(width: 15),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,7 +150,7 @@ class _DetailsState extends State<Details> {
                             Text(
                               step['status'],
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 18,
                                 fontWeight: stepCompleted ? FontWeight.bold : FontWeight.normal,
                                 color: stepCompleted ? Colors.black87 : Colors.grey
                               ),
@@ -145,7 +158,7 @@ class _DetailsState extends State<Details> {
                             if (stepCompleted)
                               Text(
                                 "Completed", // Podrías poner una hora simulada aquí
-                                style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
+                                style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
                               ),
                             const SizedBox(height: 25), // Espacio para alinear con la altura de la línea
                           ],
@@ -167,7 +180,7 @@ class _DetailsState extends State<Details> {
                 phone: widget.ds.data().toString().contains("PickUpPhone") ? widget.ds["PickUpPhone"] : "N/A",
                 icon: Icons.location_on,
                 color: const Color(0xff6053f8),
-                title: "Pick Up"
+                title: "Pick Up",
               ),
 
               const SizedBox(height: 10),
@@ -201,29 +214,29 @@ class _DetailsState extends State<Details> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(30)),
-            child: Icon(icon, color: color, size: 24)
+            child: Icon(icon, color: color, size: 30)
           ),
           const SizedBox(width: 15),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                Text(address, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                Text(title, style: const TextStyle(fontSize: 14, color: Colors.grey)),
+                Text(address, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 5),
                 Row(
                   children: [
-                    const Icon(Icons.person, size: 14, color: Colors.grey),
+                    const Icon(Icons.person, size: 16, color: Colors.grey),
                     const SizedBox(width: 5),
-                    Text(name, style: const TextStyle(fontSize: 14, color: Colors.black54)),
+                    Text(name, style: const TextStyle(fontSize: 16, color: Colors.black54)),
                   ],
                 ),
                 const SizedBox(height: 2),
                 Row(
                   children: [
-                    const Icon(Icons.phone, size: 14, color: Colors.grey),
+                    const Icon(Icons.phone, size: 16, color: Colors.grey),
                     const SizedBox(width: 5),
-                    Text(phone, style: const TextStyle(fontSize: 14, color: Colors.black54)),
+                    Text(phone, style: const TextStyle(fontSize: 16, color: Colors.black54)),
                   ],
                 ),
               ],

@@ -43,12 +43,12 @@ class _PostPageState extends State<PostPage> {
 
     setState(() { isLoading = true; });
 
-    // SIMULACIÓN: Esperamos 2 segundos para que parezca que la app "piensa"
+    // simular el efecto de loading de unos 2 segundos
     await Future.delayed(const Duration(seconds: 2));
 
     // GENERACIÓN ALEATORIA
-    // Generamos una distancia entre 1 y 50 km
-    int randomKm = Random().nextInt(50) + 1; 
+    // Generamos una distancia entre 15 y 80 km
+    int randomKm = Random().nextInt(80) + 15; 
     
     // Calculamos el precio: Base $10 + ($3 por km)
     double price = 10.0 + (randomKm * 3.0);
@@ -66,10 +66,10 @@ class _PostPageState extends State<PostPage> {
 
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         backgroundColor: Colors.green,
-        content: Text("Route Calculated Successfully! (Simulated)")));
+        content: Text("Route Calculated Successfully!")));
   }
 
-  // --- FUNCIÓN PARA SUBIR A FIREBASE ---
+  // Subir los datos a nuestra base de firebase
   uploadItem() async {
     if (totalPrice > 0 && pickupNameController.text != "" && dropoffNameController.text != "") {
       String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -169,6 +169,8 @@ class _PostPageState extends State<PostPage> {
                           decoration: BoxDecoration(
                             color: Colors.black, 
                             borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(color: Colors.black, width: 1),
+
                           ),
                           child: Center(
                             child: isLoading 
@@ -188,21 +190,129 @@ class _PostPageState extends State<PostPage> {
                       Text("Pick-up details", style: AppWidget.normalTextfeildStyle(26.0)),
                       const SizedBox(height: 10.0),
                       
-                      _buildDetailField(pickupAddressController, "Address", Icons.location_on),
+                      // CAMPO: DIRECCIÓN PICKUP (AUTO-FILLED)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(10.0)
+                        ),
+                        child: TextField(
+                          controller: pickupAddressController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            prefixIcon: const Icon(Icons.location_on, color: Color(0xff6053f8)),
+                            hintText: "Address (Auto-filled)",
+                            hintStyle: AppWidget.LightTextfeildStyle(),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 10.0),
-                      _buildDetailField(pickupNameController, "Sender Name", Icons.person),
+
+                      // CAMPO: NOMBRE REMITENTE
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(10.0)
+                        ),
+                        child: TextField(
+                          controller: pickupNameController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            prefixIcon: const Icon(Icons.person, color: Color(0xff6053f8)),
+                            hintText: "Sender Name",
+                            hintStyle: AppWidget.LightTextfeildStyle(),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 10.0),
-                      _buildDetailField(pickupPhoneController, "Sender Phone", Icons.phone,),
+
+                      // CAMPO: TELÉFONO REMITENTE
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(10.0)
+                        ),
+                        child: TextField(
+                          controller: pickupPhoneController,
+                          keyboardType: TextInputType.phone, // TECLADO NUMÉRICO
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            prefixIcon: const Icon(Icons.phone, color: Color(0xff6053f8)),
+                            hintText: "Sender Phone",
+                            hintStyle: AppWidget.LightTextfeildStyle(),
+                          ),
+                        ),
+                      ),
                       
                       const SizedBox(height: 20.0),
                       Text("Drop-off details", style: AppWidget.normalTextfeildStyle(26.0)),
                       const SizedBox(height: 10.0),
                       
-                      _buildDetailField(dropoffAddressController, "Address (Auto-filled)", Icons.flag),
+                      // CAMPO: DIRECCIÓN DROP-OFF (AUTO-FILLED)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(10.0)
+                        ),
+                        child: TextField(
+                          controller: dropoffAddressController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            prefixIcon: const Icon(Icons.flag, color: Color(0xff6053f8)),
+                            hintText: "Address (Auto-filled)",
+                            hintStyle: AppWidget.LightTextfeildStyle(),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 10.0),
-                      _buildDetailField(dropoffNameController, "Receiver Name", Icons.person),
+
+                      // CAMPO: NOMBRE RECEPTOR
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(10.0)
+                        ),
+                        child: TextField(
+                          controller: dropoffNameController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            prefixIcon: const Icon(Icons.person, color: Color(0xff6053f8)),
+                            hintText: "Receiver Name",
+                            hintStyle: AppWidget.LightTextfeildStyle(),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 10.0),
-                      _buildDetailField(dropoffPhoneController, "Receiver Phone", Icons.phone),
+
+                      // CAMPO: TELÉFONO RECEPTOR
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(10.0)
+                        ),
+                        child: TextField(
+                          controller: dropoffPhoneController,
+                          keyboardType: TextInputType.phone, // TECLADO NUMÉRICO
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            prefixIcon: const Icon(Icons.phone, color: Color(0xff6053f8)),
+                            hintText: "Receiver Phone",
+                            hintStyle: AppWidget.LightTextfeildStyle(),
+                          ),
+                        ),
+                      ),
 
                       const SizedBox(height: 40.0),
 

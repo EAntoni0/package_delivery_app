@@ -44,16 +44,23 @@ class _OrderState extends State<Order> {
 
         if (currentOrder) {
           // Current: Mostramos los que NO son Delivered
-          filteredDocs = allDocs.where((element) => element['Status'] != 'Delivered').toList();
+          filteredDocs = allDocs
+              .where((element) => element['Status'] != 'Delivered')
+              .toList();
         } else {
           // Past: Mostramos SOLO los Delivered
-          filteredDocs = allDocs.where((element) => element['Status'] == 'Delivered').toList();
+          filteredDocs = allDocs
+              .where((element) => element['Status'] == 'Delivered')
+              .toList();
         }
 
         if (filteredDocs.isEmpty) {
           return Center(
-              child: Text(currentOrder ? "No active orders" : "No delivery history",
-                  style: AppWidget.LightTextfeildStyle()));
+            child: Text(
+              currentOrder ? "No active orders" : "No delivery history",
+              style: AppWidget.LightTextfeildStyle(),
+            ),
+          );
         }
 
         return ListView.builder(
@@ -61,7 +68,7 @@ class _OrderState extends State<Order> {
           itemCount: filteredDocs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot ds = filteredDocs[index];
-            
+
             // Usamos nuestro nuevo Widget inteligente
             return OrderCard(ds: ds, isCurrent: currentOrder);
           },
@@ -77,7 +84,9 @@ class _OrderState extends State<Order> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xff6053f8),
-        title: Center(child: Text("My Orders", style: AppWidget.WhiteTextfeildStyle(26.0))),
+        title: Center(
+          child: Text("My Orders", style: AppWidget.WhiteTextfeildStyle(26.0)),
+        ),
         elevation: 0,
       ),
       body: Container(
@@ -86,7 +95,10 @@ class _OrderState extends State<Order> {
         width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
         ),
         child: Column(
           children: [
@@ -94,21 +106,41 @@ class _OrderState extends State<Order> {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () { setState(() { currentOrder = true; }); },
+                    onTap: () {
+                      setState(() {
+                        currentOrder = true;
+                      });
+                    },
                     child: Material(
                       elevation: currentOrder ? 5.0 : 0.0,
                       borderRadius: BorderRadius.circular(10),
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 15.0),
                         decoration: BoxDecoration(
-                          color: currentOrder ? Colors.white : const Color(0xFFececf8),
+                          color: currentOrder
+                              ? Colors.white
+                              : const Color(0xFFececf8),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
                           children: [
-                            Image.asset("lib/images/currentorder.png", height: 70, width: 70, fit: BoxFit.cover),
-                            const SizedBox(height: 10.0),
-                            Text("Current Orders", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: currentOrder ? Colors.black : Colors.black38)),
+                            Image.asset(
+                              "lib/images/currentorder.png",
+                              height: 70,
+                              width: 70,
+                              fit: BoxFit.cover,
+                            ),
+                            const SizedBox(height: 30.0),
+                            Text(
+                              "Current Orders",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: currentOrder
+                                    ? Colors.black
+                                    : Colors.black38,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -118,21 +150,41 @@ class _OrderState extends State<Order> {
                 const SizedBox(width: 20),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () { setState(() { currentOrder = false; }); },
+                    onTap: () {
+                      setState(() {
+                        currentOrder = false;
+                      });
+                    },
                     child: Material(
                       elevation: !currentOrder ? 5.0 : 0.0,
                       borderRadius: BorderRadius.circular(10),
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 15.0),
                         decoration: BoxDecoration(
-                          color: !currentOrder ? Colors.white : const Color(0xFFececf8),
+                          color: !currentOrder
+                              ? Colors.white
+                              : const Color(0xFFececf8),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
                           children: [
-                            Image.asset("lib/images/delivery-man.png", height: 70, width: 70, fit: BoxFit.cover),
-                            const SizedBox(height: 10.0),
-                            Text("Past Orders", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: !currentOrder ? Colors.black : Colors.black38)),
+                            Image.asset(
+                              "lib/images/delivery-man.png",
+                              height: 70,
+                              width: 70,
+                              fit: BoxFit.cover,
+                            ),
+                            const SizedBox(height: 30.0),
+                            Text(
+                              "Past Orders",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: !currentOrder
+                                    ? Colors.black
+                                    : Colors.black38,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -167,34 +219,34 @@ class _OrderCardState extends State<OrderCard> {
   // Configuración de los pasos de la simulación
   final List<Map<String, dynamic>> simulationSteps = [
     {
-      'time': 0, 
-      'status': 'Driver assigned', 
-      'icon': Icons.assignment_ind_outlined // Icono de conductor asignado
+      'time': 0,
+      'status': 'Driver assigned',
+      'icon': Icons.assignment_ind_outlined, // Icono de conductor asignado
     },
     {
-      'time': 8, 
-      'status': 'Driver on the way to pick up', 
-      'icon': Icons.directions_car_outlined // Icono de auto en camino
+      'time': 8,
+      'status': 'Driver on the way to pick up',
+      'icon': Icons.directions_car_outlined, // Icono de auto en camino
     },
     {
-      'time': 16, 
-      'status': 'Driver arrived at pick up', 
-      'icon': Icons.storefront_outlined // Icono de tienda/lugar
+      'time': 16,
+      'status': 'Driver arrived at pick up',
+      'icon': Icons.storefront_outlined, // Icono de tienda/lugar
     },
     {
-      'time': 20, 
-      'status': 'Package collected', 
-      'icon': Icons.inventory_2_outlined // Icono de paquete recogido
+      'time': 20,
+      'status': 'Package collected',
+      'icon': Icons.inventory_2_outlined, // Icono de paquete recogido
     },
     {
-      'time': 30, 
-      'status': 'On the way to destination', 
-      'icon': Icons.local_shipping_outlined // Icono de camión en ruta
+      'time': 30,
+      'status': 'On the way to destination',
+      'icon': Icons.local_shipping_outlined, // Icono de camión en ruta
     },
     {
-      'time': 40, 
-      'status': 'Delivered', 
-      'icon': Icons.home_work_outlined // Icono de entrega finalizada
+      'time': 40,
+      'status': 'Delivered',
+      'icon': Icons.home_work_outlined, // Icono de entrega finalizada
     },
   ];
 
@@ -238,31 +290,36 @@ class _OrderCardState extends State<OrderCard> {
 
           // 1. Obtener ID del usuario actual
           String uid = FirebaseAuth.instance.currentUser!.uid;
-          
+
           // 2. Obtener ID del documento del pedido
-          String orderId = widget.ds.id; 
+          String orderId = widget.ds.id;
 
           // 3. ACTUALIZAR FIREBASE A "Delivered"
           await DatabaseMethods().updateStatus(uid, orderId);
-          
-          // ¡Listo! Al actualizarse Firebase, el StreamBuilder del padre
+
+          // Al actualizarse la base de datos, el StreamBuilder del padre
           // detectará el cambio y moverá esta tarjeta a "Past Orders" automáticamente.
         }
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         _timer?.cancel();
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Details(
-          ds: widget.ds, secondsPassed: secondsPassed,))
-          ).then((_) {
-            if(!finished && mounted) {
-              startSimulation();
-            }
-          });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                Details(ds: widget.ds, secondsPassed: secondsPassed),
+          ),
+        ).then((_) {
+          if (!finished && mounted) {
+            startSimulation();
+          }
+        });
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 20.0),
@@ -275,6 +332,11 @@ class _OrderCardState extends State<OrderCard> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
+              border: Border.all(
+                color: Colors
+                    .black, // O el color que quieras (ej: Color(0xff6053f8))
+                width: 1.0, // El grosor del borde
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,19 +345,34 @@ class _OrderCardState extends State<OrderCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Order ID: ${widget.ds["Id"] ?? "..."}", style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600)),
+                    Text(
+                      "Order ID: ${widget.ds["Id"] ?? "..."}",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
                       decoration: BoxDecoration(
-                        color: finished ? Colors.green.withOpacity(0.1) : const Color(0xff6053f8).withOpacity(0.1),
+                        color: finished
+                            ? Colors.green.withOpacity(0.1)
+                            : const Color(0xff6053f8).withOpacity(0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
-                        finished ? "Delivered" : widget.ds["Status"], 
+                        finished ? "Delivered" : widget.ds["Status"],
                         style: TextStyle(
-                            color: finished ? Colors.green : const Color(0xff6053f8),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12),
+                          color: finished
+                              ? Colors.green
+                              : const Color(0xff6053f8),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                   ],
@@ -306,29 +383,38 @@ class _OrderCardState extends State<OrderCard> {
                 // Mostramos siempre el origen y destino arriba para contexto
                 Row(
                   children: [
-                    const Icon(Icons.location_on, color: Colors.black54, size: 30),
+                    const Icon(
+                      Icons.location_on,
+                      color: Colors.black54,
+                      size: 34,
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         "${widget.ds["PickUp"]}  ➔  ${widget.ds["DropOff"]}",
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                         overflow: TextOverflow.ellipsis,
                       ),
-                    )
+                    ),
                   ],
                 ),
                 const Divider(height: 20),
 
-                // 3. LÍNEA DE TIEMPO 
+                // 3. LÍNEA DE TIEMPO
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: simulationSteps.map((step) {
                     // Solo mostramos este paso si el tiempo ya pasó
                     if (secondsPassed >= step['time']) {
                       bool isLast = step['status'] == 'Delivered';
-                      
+
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0), // Espacio entre puntos
+                        padding: const EdgeInsets.only(
+                          bottom: 10.0,
+                        ), // Espacio entre puntos
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -336,21 +422,30 @@ class _OrderCardState extends State<OrderCard> {
                             Column(
                               children: [
                                 Icon(
-                                  Icons.check_circle, 
-                                  color: isLast ? Colors.green : const Color(0xff6053f8), 
-                                  size: 18
+                                  Icons.check_circle,
+                                  color: isLast
+                                      ? Colors.green
+                                      : const Color(0xff6053f8),
+                                  size: 24,
                                 ),
                                 // Dibujamos una linea pequeña si no es el último elemento mostrado
-                                if (step['time'] != 40 && secondsPassed >= (step['time'] as int)) 
-                                  Container(height: 15, width: 2, color: Colors.grey.shade300)
+                                if (step['time'] != 40 &&
+                                    secondsPassed >= (step['time'] as int))
+                                  Container(
+                                    height: 15,
+                                    width: 2,
+                                    color: Colors.grey.shade300,
+                                  ),
                               ],
                             ),
                             const SizedBox(width: 12),
                             Icon(
                               step['icon'], // Usamos el icono del mapa
-                              size: 22,
+                              size: 28,
                               // Si es el último paso (Delivered), se pone verde, si no, gris oscuro
-                              color: isLast ? Colors.green : Colors.grey.shade700, 
+                              color: isLast
+                                  ? Colors.green
+                                  : Colors.grey.shade700,
                             ),
                             const SizedBox(width: 12),
                             // El texto del estado
@@ -358,9 +453,11 @@ class _OrderCardState extends State<OrderCard> {
                               child: Text(
                                 step['status'],
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: isLast ? FontWeight.bold : FontWeight.w500,
-                                  color: isLast ? Colors.green : Colors.black87
+                                  fontSize: 16,
+                                  fontWeight: isLast
+                                      ? FontWeight.bold
+                                      : FontWeight.w500,
+                                  color: isLast ? Colors.green : Colors.black87,
                                 ),
                               ),
                             ),
@@ -372,17 +469,20 @@ class _OrderCardState extends State<OrderCard> {
                     }
                   }).toList(),
                 ),
-                
+
                 const SizedBox(height: 10),
-                
+
                 // 4. PRECIO
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text("Total: ", style: AppWidget.LightTextfeildStyle()),
-                    Text("\$${widget.ds.data().toString().contains("Price") ? widget.ds["Price"] : "0.0"}", style: AppWidget.HeadLineTextfeildStyle(18)),
+                    Text(
+                      "\$${widget.ds.data().toString().contains("Price") ? widget.ds["Price"] : "0.0"}",
+                      style: AppWidget.HeadLineTextfeildStyle(18),
+                    ),
                   ],
-                )
+                ),
               ],
             ),
           ),
