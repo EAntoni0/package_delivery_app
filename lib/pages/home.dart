@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                       const SizedBox(height: 6.0),
-                      Text("City Avenue, New York",
+                      Text("Merida, Yucatán",
                           style: AppWidget.HeadLineTextfeildStyle(20.0)),
                     ],
                   ),

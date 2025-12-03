@@ -1,5 +1,4 @@
 import 'dart:math'; // Importante para generar números aleatorios
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:package_delivery_app/services/database.dart';
@@ -117,6 +116,132 @@ class _PostPageState extends State<PostPage> {
     }
   }
 
+
+  void _showPaymentSheet() {
+    // Validaciones antes de abrir el pago
+    if (totalPrice == 0) {
+       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(backgroundColor: Colors.orange, content: Text("Primero calcula el precio.")));
+       return;
+    }
+    if (pickupNameController.text.isEmpty || dropoffNameController.text.isEmpty) {
+       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(backgroundColor: Colors.orange, content: Text("Por favor llena los nombres de contacto.")));
+       return;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      builder: (BuildContext context) {
+        bool isPaying = false;
+
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setSheetState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+                left: 20, right: 20, top: 20
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.payment, color: Color(0xff6053f8)),
+                        const SizedBox(width: 10),
+                        Text("Método de Pago", style: AppWidget.HeadLineTextfeildStyle(20)),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    
+                    // simular targeta de credito
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.black87,
+                        borderRadius: BorderRadius.circular(20)
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Icon(Icons.credit_card, color: Colors.white),
+                              Text("VISA", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, fontSize: 18))
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          const Text("**** **** **** 4242", style: TextStyle(color: Colors.white, fontSize: 20, letterSpacing: 2)),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text("TITULAR", style: TextStyle(color: Colors.grey, fontSize: 10)),
+                              const Text("EXPIRA", style: TextStyle(color: Colors.grey, fontSize: 10)),
+                            ],
+                          ),
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Erick Chan", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                              Text("12/25", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 30),
+                    Text("Total a Pagar", style: AppWidget.LightTextfeildStyle()),
+                    Text("\$$totalPrice", style: AppWidget.HeadLineTextfeildStyle(26)),
+                    const SizedBox(height: 30),
+
+                    // BOTÓN DE "PAGAR AHORA"
+                    GestureDetector(
+                      onTap: () async {
+                        // 1. Mostrar carga en el botón
+                        setSheetState(() { isPaying = true; });
+                        
+                        // 2. Simular espera de red (2 segundos)
+                        await Future.delayed(const Duration(seconds: 2));
+                        
+                        // 3. Cierra la hoja de pago
+                        if(context.mounted) Navigator.pop(context);
+                        
+                        // 4. Guardar el pedido en la base de datos
+                        uploadItem();
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        decoration: BoxDecoration(
+                          color: const Color(0xff6053f8),
+                          borderRadius: BorderRadius.circular(15)
+                        ),
+                        child: Center(
+                          child: isPaying 
+                            ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3))
+                            : const Text("Pagar Ahora", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                  ],
+                ),
+              ),
+            );
+          }
+        );
+      },
+    );
+  }
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,7 +268,7 @@ class _PostPageState extends State<PostPage> {
                       Center(child: Image.asset('lib/images/delivery-truck.png', height: 180, width: 180, fit: BoxFit.cover)),
                       
                       // -------------------------------------------------
-                      // SECCIÓN 1: BÚSQUEDA Y CÁLCULO (ARRIBA)
+                      // SECCIÓN 1: BÚSQUEDA Y CÁLCULO
                       // -------------------------------------------------
                       const SizedBox(height: 20.0),
                       Text("Add Location", style: AppWidget.HeadLineTextfeildStyle(24.0)),
@@ -160,7 +285,7 @@ class _PostPageState extends State<PostPage> {
 
                       const SizedBox(height: 30.0),
 
-                      // BOTÓN MEDIO: CALCULAR PRECIO (SIMULADO)
+                      // BOTÓN MEDIO: CALCULAR PRECIO
                       GestureDetector(
                         onTap: calculateDistanceAndPrice,
                         child: Container(
@@ -175,7 +300,7 @@ class _PostPageState extends State<PostPage> {
                           child: Center(
                             child: isLoading 
                               ? const CircularProgressIndicator(color: Colors.white)
-                              : const Text("Calculate Distance & Price", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                              : const Text("Calculate Distance & Price", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
                           ),
                         ),
                       ),
@@ -184,13 +309,13 @@ class _PostPageState extends State<PostPage> {
                       const Divider(thickness: 2), 
 
                       // -------------------------------------------------
-                      // SECCIÓN 2: FORMULARIOS DETALLADOS (ABAJO)
+                      // SECCIÓN 2: FORMULARIOS DETALLADOS
                       // -------------------------------------------------
                       const SizedBox(height: 20.0),
                       Text("Pick-up details", style: AppWidget.normalTextfeildStyle(26.0)),
                       const SizedBox(height: 10.0),
                       
-                      // CAMPO: DIRECCIÓN PICKUP (AUTO-FILLED)
+                      // CAMPO: DIRECCIÓN PICKUP SE LLENAN SOLOS
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         decoration: BoxDecoration(
@@ -202,8 +327,8 @@ class _PostPageState extends State<PostPage> {
                           controller: pickupAddressController,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            prefixIcon: const Icon(Icons.location_on, color: Color(0xff6053f8)),
-                            hintText: "Address (Auto-filled)",
+                            prefixIcon: const Icon(Icons.location_on, color: Color(0xff6053f8), size: 30,),
+                            hintText: "Address",
                             hintStyle: AppWidget.LightTextfeildStyle(),
                           ),
                         ),
@@ -222,7 +347,7 @@ class _PostPageState extends State<PostPage> {
                           controller: pickupNameController,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            prefixIcon: const Icon(Icons.person, color: Color(0xff6053f8)),
+                            prefixIcon: const Icon(Icons.person, color: Color(0xff6053f8), size: 30),
                             hintText: "Sender Name",
                             hintStyle: AppWidget.LightTextfeildStyle(),
                           ),
@@ -243,7 +368,7 @@ class _PostPageState extends State<PostPage> {
                           keyboardType: TextInputType.phone, // TECLADO NUMÉRICO
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            prefixIcon: const Icon(Icons.phone, color: Color(0xff6053f8)),
+                            prefixIcon: const Icon(Icons.phone, color: Color(0xff6053f8), size: 30),
                             hintText: "Sender Phone",
                             hintStyle: AppWidget.LightTextfeildStyle(),
                           ),
@@ -266,8 +391,8 @@ class _PostPageState extends State<PostPage> {
                           controller: dropoffAddressController,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            prefixIcon: const Icon(Icons.flag, color: Color(0xff6053f8)),
-                            hintText: "Address (Auto-filled)",
+                            prefixIcon: const Icon(Icons.flag, color: Color(0xff6053f8), size: 30),
+                            hintText: "Address",
                             hintStyle: AppWidget.LightTextfeildStyle(),
                           ),
                         ),
@@ -286,7 +411,7 @@ class _PostPageState extends State<PostPage> {
                           controller: dropoffNameController,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            prefixIcon: const Icon(Icons.person, color: Color(0xff6053f8)),
+                            prefixIcon: const Icon(Icons.person, color: Color(0xff6053f8), size: 30),
                             hintText: "Receiver Name",
                             hintStyle: AppWidget.LightTextfeildStyle(),
                           ),
@@ -307,7 +432,7 @@ class _PostPageState extends State<PostPage> {
                           keyboardType: TextInputType.phone, // TECLADO NUMÉRICO
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            prefixIcon: const Icon(Icons.phone, color: Color(0xff6053f8)),
+                            prefixIcon: const Icon(Icons.phone, color: Color(0xff6053f8), size: 30),
                             hintText: "Receiver Phone",
                             hintStyle: AppWidget.LightTextfeildStyle(),
                           ),
@@ -338,7 +463,9 @@ class _PostPageState extends State<PostPage> {
                             
                             // BOTÓN FINAL: PLACE ORDER
                             GestureDetector(
-                              onTap: uploadItem,
+                              onTap: () {
+                                _showPaymentSheet();
+                              },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                                 decoration: BoxDecoration(

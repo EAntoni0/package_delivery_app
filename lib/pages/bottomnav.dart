@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:package_delivery_app/pages/home.dart';
-import 'package:package_delivery_app/pages/onboarding.dart';
 import 'package:package_delivery_app/pages/order.dart';
 import 'package:package_delivery_app/pages/post.dart';
 import 'package:package_delivery_app/pages/profile.dart';

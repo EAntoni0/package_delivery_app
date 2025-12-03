@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:package_delivery_app/pages/bottomnav.dart';
 import 'package:package_delivery_app/pages/signup.dart';
 import 'package:package_delivery_app/services/widget_support.dart';
+import 'package:package_delivery_app/pages/forgot_password.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -51,7 +52,7 @@ class _LogInState extends State<LogIn> {
           child: Column(
             children: [
               // IMAGEN DE CABECERA (Welcome Back)
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Image.asset(
                   "lib/images/signin.png", // Tu imagen de "Welcome Back"
@@ -109,7 +110,16 @@ class _LogInState extends State<LogIn> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text("Forgot Password?", style: AppWidget.LightTextfeildStyle()),
+                          GestureDetector(
+                            onTap: () {
+                              // Navegar a la pantalla de recuperación
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPassword()));
+                            },
+                            child: Text(
+                              "Forgot Password?", 
+                              style: AppWidget.LightTextfeildStyle()
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(height: 30.0),
@@ -123,7 +133,7 @@ class _LogInState extends State<LogIn> {
                             userLogin();
                           }
                         },
-                        child: Container(
+                        child: SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

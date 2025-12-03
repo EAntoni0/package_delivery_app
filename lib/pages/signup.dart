@@ -69,7 +69,7 @@ class _SignUpState extends State<SignUp> {
           child: Column(
             children: [
               // IMAGEN DE CABECERA (Create Account)
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Image.asset(
                   "lib/images/login.png", // Tu imagen de "Create Account"
@@ -155,7 +155,7 @@ class _SignUpState extends State<SignUp> {
                           }
                           registration();
                         },
-                        child: Container(
+                        child: SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinea texto y botón

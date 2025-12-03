@@ -3,11 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart'; // Necesario para detectar Web (kIsWeb)
 
 // Tus importaciones de páginas
-import 'package:package_delivery_app/pages/bottomnav.dart';
-import 'package:package_delivery_app/pages/home.dart';
 import 'package:package_delivery_app/pages/login.dart';
-import 'package:package_delivery_app/pages/onboarding.dart';
-import 'package:package_delivery_app/pages/post.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
