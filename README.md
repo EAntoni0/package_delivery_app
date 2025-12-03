@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-### 📦 Package Delivery App
 
-
-
-=======
 # 📦 Package Delivery App  
 **English | Español**
 
@@ -127,7 +122,7 @@ Package Delivery App es una aplicación móvil desarrollada en Flutter que simul
 ---
 
 ## 📄 License
-MIT License (optional)
+[Package Delivery App in Flutter (2025) by Shivam Gupta]https://youtu.be/mtEMzSxDFx4?si=opdzYOvMwRW9nTmL
 
 
 ## Login Screen
